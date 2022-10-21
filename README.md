@@ -11,7 +11,7 @@ Votre objectif est d'afficher les pas effectués par un utilisateur sur un calen
 * Vous ne pouvez pas installer de dépendances/librairies
 
 
-Pour récupérer les pas de l'utilisateur, vous disposez d'une function `getStepsHistory(startDate: string, endDate: string)` qui retourne une timeseries des données de pas de l'utilisateurs. Il y a plusieurs data points par jour.
+Pour récupérer les pas de l'utilisateur, vous disposez d'une function `getStepsHistory(startDate: string, endDate: string)` qui retourne une timeseries des données de pas de l'utilisateur. Il y a plusieurs data points par jour.
 
 ```
 [
