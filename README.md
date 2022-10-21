@@ -4,9 +4,12 @@
 
 Votre objectif est d'afficher les pas effectués par un utilisateur sur un calendrier avec une vue mensuelle.
 
+![steps_calendar](https://user-images.githubusercontent.com/365969/197163464-a9e95d8e-e4b3-4557-bf37-3d19c42d9cbb.jpg)
+
 * Essayer de reproduire cette UI le plus fidèlement possible.
 * L'utilisateur doit pouvoir changer de mois.
 * Vous ne pouvez pas installer de dépendances/librairies
+
 
 Pour récupérer les pas de l'utilisateur, vous disposez d'une function `getStepsHistory(startDate: string, endDate: string)` qui retourne une timeseries des données de pas de l'utilisateurs. Il y a plusieurs data points par jour.
 
@@ -45,13 +48,14 @@ Pour récupérer les pas de l'utilisateur, vous disposez d'une function `getStep
     ...
 ]
 ```
+À noter que l'appel à `getStepsHistory()` est une tâche longue qui peut prendre plusieurs secondes.
 
-À noter que getStepsHistory() est une tâche longue qui peut prendre plusieurs secondes.
 
-
-## installation
+## Installation
 
 Suivez le React Native CLI Quickstart
 https://reactnative.dev/docs/environment-setup
 
-Puis,
+## Submission
+
+* Forker ce repo et ouvrir une pull request 
