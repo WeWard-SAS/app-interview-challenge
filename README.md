@@ -6,7 +6,7 @@ Votre objectif est d'afficher les pas effectués par un utilisateur sur un calen
 
 ![steps_calendar](https://user-images.githubusercontent.com/365969/197163464-a9e95d8e-e4b3-4557-bf37-3d19c42d9cbb.jpg)
 
-* Essayer de reproduire cette UI le plus fidèlement possible.
+* Essayez de reproduire cette UI le plus fidèlement possible.
 * L'utilisateur doit pouvoir changer de mois.
 * Vous ne pouvez pas installer de dépendances/librairies
 
