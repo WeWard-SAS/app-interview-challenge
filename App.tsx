@@ -1,24 +1,48 @@
-import React, {useEffect} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import {CustomCalendar} from './components/CustomCalendar/CustomCalendar';
 import {getStepsHistory} from './services/healthService';
+import moment from 'moment';
+import {formatStepsData, StepsByDays} from './utils/stepUtils';
 
 const App = () => {
-  useEffect(() => {
-    (async function () {
-      const steps = await getStepsHistory('2022-09-01', '2022-10-01');
+  const [activeDate, setActiveDate] = useState(moment());
+  const [stepDays, setStepDays] = useState<StepsByDays>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-      console.log(steps);
+  useEffect(() => {
+    const startOfMonth = moment(activeDate)
+      .startOf('month')
+      .format('YYYY-MM-DD');
+    const endOfMonth = moment(activeDate).add(1, 'month').format('YYYY-MM-DD');
+
+    (async function () {
+      setIsLoading(true);
+      const steps = await getStepsHistory(startOfMonth, endOfMonth);
+      setStepDays(formatStepsData(steps));
+      setTimeout(() => {
+        // Simulate debounce function
+        setIsLoading(false);
+      }, 1000);
     })();
-  });
+  }, [activeDate]);
+
+  const onDateChange = (date: moment.Moment) => {
+    setStepDays({});
+    setActiveDate(date);
+  };
 
   return (
     <SafeAreaView>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.scrollContainer}>
-        <View>
-          <Text>Hello World !</Text>
-        </View>
+        <CustomCalendar
+          isLoading={isLoading}
+          activeDate={activeDate}
+          onDateChange={onDateChange}
+          stepDays={stepDays}
+        />
       </ScrollView>
     </SafeAreaView>
   );
