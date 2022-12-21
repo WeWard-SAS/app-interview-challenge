@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {getStepsHistory} from '../services/healthService';
+import {isFutureDate} from './utile';
 
 type CalendarDaysProps = {
   month: number;
@@ -49,14 +50,17 @@ type DateCalendarProps = {
 };
 
 const DateCalendar = ({month, year, day}: DateCalendarProps) => {
-  const isFutureDate = new Date() < new Date(year, month - 1, day || undefined);
+  const isTheDateInTheFuture = day ? isFutureDate({month, year, day}) : false;
 
   const [dataToDisplayInDate, setDataToDisplayInDate] = useState('');
 
   const getDataToDisplay = useCallback(
-    async (_month: number, _year: number, _day: number) => {
+    async (_year: number, _month: number, _day: number) => {
       console.log(`${_year}-${_month}-${_day}`);
 
+      if (isFutureDate({year: _year, month: _month, day: _day})) {
+        return '';
+      }
       const steps = await getStepsHistory(
         `${_year}-${_month}-${_day}`,
         `${_year}-${_month}-${_day + 1}`,
@@ -95,7 +99,7 @@ const DateCalendar = ({month, year, day}: DateCalendarProps) => {
       <Text
         style={{
           textAlign: 'center',
-          color: isFutureDate ? 'gray' : 'black',
+          color: isTheDateInTheFuture ? 'gray' : 'black',
         }}>
         {day}
       </Text>
