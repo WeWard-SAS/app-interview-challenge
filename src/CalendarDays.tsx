@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
+import {getStepsHistory} from '../services/healthService';
 
 type CalendarDaysProps = {
   month: number;
@@ -50,6 +51,40 @@ type DateCalendarProps = {
 const DateCalendar = ({month, year, day}: DateCalendarProps) => {
   const isFutureDate = new Date() < new Date(year, month - 1, day || undefined);
 
+  const [dataToDisplayInDate, setDataToDisplayInDate] = useState('');
+
+  const getDataToDisplay = useCallback(
+    async (_month: number, _year: number, _day: number) => {
+      console.log(`${_year}-${_month}-${_day}`);
+
+      const steps = await getStepsHistory(
+        `${_year}-${_month}-${_day}`,
+        `${_year}-${_month}-${_day + 1}`,
+      );
+
+      const sum = steps.reduce(
+        (partialSum, step) => partialSum + step.value,
+        0,
+      );
+
+      return '' + sum;
+    },
+    [],
+  );
+
+  useEffect(() => {
+    (async () => {
+      if (day) {
+        const data = await getDataToDisplay(year, month, day);
+        setDataToDisplayInDate(data);
+      }
+    })();
+
+    return () => {
+      setDataToDisplayInDate('');
+    };
+  }, [year, month, day, getDataToDisplay]);
+
   return (
     <View
       style={{
@@ -64,6 +99,7 @@ const DateCalendar = ({month, year, day}: DateCalendarProps) => {
         }}>
         {day}
       </Text>
+      <Text style={{textAlign: 'center'}}>{dataToDisplayInDate}</Text>
     </View>
   );
 };
