@@ -1,15 +1,10 @@
-import React, {useEffect} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {getStepsHistory} from './services/healthService';
+import React, {useState} from 'react';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {Calendar} from './src/Calendar';
 
 const App = () => {
-  useEffect(() => {
-    (async function () {
-      const steps = await getStepsHistory('2022-09-01', '2022-10-01');
-
-      console.log(steps);
-    })();
-  });
+  const [month, setMonth] = useState(12);
+  const [year, setYear] = useState(2022);
 
   return (
     <SafeAreaView>
@@ -17,7 +12,12 @@ const App = () => {
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.scrollContainer}>
         <View>
-          <Text>Hello World !</Text>
+          <Calendar
+            month={month}
+            year={year}
+            setYear={setYear}
+            setMonth={setMonth}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
