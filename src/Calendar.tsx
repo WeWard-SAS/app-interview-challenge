@@ -1,4 +1,5 @@
 import React from 'react';
+import {CalendarDays} from './CalendarDays';
 import {CalendarHeader} from './CalendarHeader';
 
 type CalendarProps = {
@@ -16,6 +17,7 @@ export const Calendar = ({month, year, setMonth, setYear}: CalendarProps) => {
         setMonth={setMonth}
         setYear={setYear}
       />
+      <CalendarDays month={month} year={year} />
     </>
   );
 };
