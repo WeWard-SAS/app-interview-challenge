@@ -33,10 +33,37 @@ export const CalendarDays = ({month, year}: CalendarDaysProps) => {
       {calendarMatrix.map(calendarMatrixWeek => (
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           {calendarMatrixWeek.map(calendarMatrixDay => (
-            <Text>{calendarMatrixDay}</Text>
+            <DateCalendar day={calendarMatrixDay} month={month} year={year} />
           ))}
         </View>
       ))}
     </>
+  );
+};
+
+type DateCalendarProps = {
+  month: number;
+  year: number;
+  day: number | null;
+};
+
+const DateCalendar = ({month, year, day}: DateCalendarProps) => {
+  const isFutureDate = new Date() < new Date(year, month - 1, day || undefined);
+
+  return (
+    <View
+      style={{
+        margin: 1,
+        height: 40,
+        flex: 1,
+      }}>
+      <Text
+        style={{
+          textAlign: 'center',
+          color: isFutureDate ? 'gray' : 'black',
+        }}>
+        {day}
+      </Text>
+    </View>
   );
 };
