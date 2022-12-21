@@ -95,6 +95,7 @@ const DateCalendar = ({month, year, day}: DateCalendarProps) => {
         margin: 1,
         height: 40,
         flex: 1,
+        justifyContent: 'center',
       }}>
       <Text
         style={{
@@ -103,7 +104,11 @@ const DateCalendar = ({month, year, day}: DateCalendarProps) => {
         }}>
         {day}
       </Text>
-      <Text style={{textAlign: 'center'}}>{dataToDisplayInDate}</Text>
+      {dataToDisplayInDate && (
+        <Text style={{textAlign: 'center', color: '#FF6700'}}>
+          {dataToDisplayInDate}
+        </Text>
+      )}
     </View>
   );
 };
