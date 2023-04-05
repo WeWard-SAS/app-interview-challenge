@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-interface StepDataPoint {
+export interface StepDataPoint {
   startDate: string; // une string ISO 8601
   endDate: string; // une string ISO 8601
   value: number;
