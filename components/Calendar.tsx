@@ -2,14 +2,26 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import {EMPTY_STRING} from '../Constants';
+import {StepsData} from '../types';
+import Labels from '../Labels';
+import {getMatrix} from './calendarHelper';
 
 type CalendarProps = {
   startDate: Date;
+  stepsData: StepsData;
+  loading: boolean;
   onStartDateChanged: (newStartDate: Date) => void;
 };
 
 const Calendar = (props: CalendarProps) => {
-  const {startDate, onStartDateChanged} = props;
+  const {startDate, stepsData, loading, onStartDateChanged} = props;
+  if (loading) {
+    return (
+      <View>
+        <Text>{Labels.Loading}</Text>
+      </View>
+    );
+  }
 
   const Header = () => {
     let title = EMPTY_STRING;
@@ -56,11 +68,26 @@ const Calendar = (props: CalendarProps) => {
   };
 
   const CalendarBody = () => {
-    return (
-      <View style={styles.calendarContainer}>
-        <Text>Calendar Body</Text>
-      </View>
-    );
+    const calendarMatrix = getMatrix(startDate);
+    const calendarRows = calendarMatrix.map((row, rowIndex: number) => {
+      let rowItems = row.map((item: number | string, colIndex: number) => {
+        const day = item as number;
+        const steps = day !== -1 ? stepsData.get(day)?.toString() : '';
+        return (
+          <View key={colIndex} style={styles.dayContainer}>
+            <Text style={styles.dayText}>{item !== -1 ? item : ''}</Text>
+            <Text style={styles.stepsText}>{steps}</Text>
+          </View>
+        );
+      });
+
+      return (
+        <View key={rowIndex} style={styles.rowContainer}>
+          {rowItems}
+        </View>
+      );
+    });
+    return <View style={styles.calendarContainer}>{calendarRows}</View>;
   };
 
   return (
@@ -79,10 +106,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginBottom: 30,
+    paddingRight: 10,
+    paddingLeft: 10,
   },
-  calendarContainer: {
-    backgroundColor: 'cyan',
-  },
+  calendarContainer: {},
   headerTextContainer: {
     width: '75%',
   },
@@ -103,6 +130,28 @@ const styles = StyleSheet.create({
   navigationImage: {
     width: 25,
     height: 25,
+  },
+  rowContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  dayContainer: {
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+  },
+  dayText: {
+    color: 'black',
+    marginBottom: 2,
+    fontSize: 12,
+  },
+  stepsText: {
+    color: 'orange',
+    marginBottom: 10,
+    fontSize: 12,
   },
 });
 export default Calendar;
