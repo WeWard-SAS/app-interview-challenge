@@ -3,8 +3,13 @@ import { Text, View } from 'react-native';
 import moment from 'moment';
 import ApplicationStyles from '../styles/ApplicationStyle';
 import Metrics from '../styles/Metrics';
+import { DayStep, WeekData } from '../Utils/types/types';
 
-const CalendarWeekDays = props => {
+interface Props {
+  weeks: WeekData[];
+}
+
+const CalendarWeekDays = (props: Props) => {
   const { weeks } = props;
 
   return (
@@ -19,39 +24,48 @@ const CalendarWeekDays = props => {
         {moment.weekdaysShort().map((day: string, index: number) => (
           <View
             style={[ApplicationStyles.flex, ApplicationStyles.columnContainer]}>
-            <Text key={index}>{day.toUpperCase()}.</Text>
+            <Text key={index} style={ApplicationStyles.boldText}>
+              {day.toUpperCase()}.
+            </Text>
           </View>
         ))}
       </View>
 
-      {weeks.map(week => (
+      {weeks.map((week: WeekData) => (
         <View
           key={week.key}
           style={[
             ApplicationStyles.rowContainer,
-            { marginTop: Metrics.padding },
+            {
+              marginTop: Metrics.padding,
+            },
           ]}>
-          {week.days.map(day => (
+          {week.days.map((day: DayStep) => (
             <View
               style={[
                 ApplicationStyles.flex,
                 ApplicationStyles.columnContainer,
+                ApplicationStyles.fixedSizeDays,
               ]}>
               <Text
                 key={day.dayNumber}
                 style={[
                   ApplicationStyles.genericText,
-                  ApplicationStyles.textWeekDay,
+                  day?.isDayAfter
+                    ? ApplicationStyles.textAfterWeekDay
+                    : ApplicationStyles.textWeekDay,
                 ]}>
                 {day.dayNumber}
               </Text>
-              <Text
-                style={[
-                  ApplicationStyles.genericText,
-                  ApplicationStyles.textStepHistory,
-                ]}>
-                {day.numberOfSteps}
-              </Text>
+              {!day?.isDayAfter && (
+                <Text
+                  style={[
+                    ApplicationStyles.genericText,
+                    ApplicationStyles.textStepHistory,
+                  ]}>
+                  {day.numberOfSteps}
+                </Text>
+              )}
             </View>
           ))}
         </View>

@@ -1,28 +1,14 @@
 import { useEffect, useState } from 'react';
-import { getStepsHistory, StepDataPoint } from '../services/healthService';
+import { getStepsHistory, isDayAfter } from '../services/healthService';
 import moment from 'moment';
+import { NativeModules, Platform } from 'react-native';
+import { DayStep, StepData, StepHistory, WeekData } from '../types/types';
 
-type WeekData = {
-  key: number;
-  days: {
-    dayNumber: string | number;
-    isCurrentMonth: boolean;
-  }[];
-};
-
-interface StepData {
-  steps: StepDataPoint[];
-  months: string;
-  weeks: WeekData[];
-}
-
-interface StepHistory {
-  [date: string]: {
-    startDate: string;
-    endDate: string;
-    value: number;
-  };
-}
+const isAndroid = Platform.OS === 'android';
+const locales = isAndroid
+  ? NativeModules.I18nManager.localeIdentifier
+  : NativeModules.SettingsManager.settings.AppleLocale ||
+    NativeModules.SettingsManager.settings.AppleLanguages[0];
 
 // Current Month will have this format 'YYYY MM'
 const useStepsHistory = (currentMonth: string) => {
@@ -65,11 +51,11 @@ const useStepsHistory = (currentMonth: string) => {
           .day();
 
         const weeksInMonth = Math.ceil((daysInMonth + firstDayOfMonth) / 7);
-        const weeks = [];
+        const weeks: WeekData[] = [];
 
         // Mapping the weeks
         for (let week = 0; week < weeksInMonth; week++) {
-          const days = [];
+          const days: DayStep[] = [];
 
           // Mapping the days
           for (let day = 0; day < 7; day++) {
@@ -78,16 +64,33 @@ const useStepsHistory = (currentMonth: string) => {
             // If day part of the month, pushing steps and index
             if (dayIndex > 0 && dayIndex <= daysInMonth) {
               days.push({
+                key: dayIndex,
                 dayNumber: dayIndex,
                 isCurrentMonth: true,
-                numberOfSteps: groupedStepsData.find(
-                  item => moment(item.startDate).date() === dayIndex,
-                )?.value,
+                numberOfSteps: isDayAfter(
+                  moment(`${currentMonth} ${dayIndex}`, 'YYYY MM D'),
+                )
+                  ? '300'
+                  : groupedStepsData
+                      .find(item => moment(item.startDate).date() === dayIndex)
+                      ?.value.toLocaleString(locales.split('_')[0], {
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                        useGrouping: true,
+                      }),
+                isDayAfter: isDayAfter(
+                  moment(`${currentMonth} ${dayIndex}`, 'YYYY MM D'),
+                ),
               });
             } else {
               days.push({
+                key: dayIndex,
                 dayNumber: '',
+                numberOfSteps: '',
                 isCurrentMonth: false,
+                isDayAfter: isDayAfter(
+                  moment(`${currentMonth} ${dayIndex}`, 'YYYY MM D'),
+                ),
               });
             }
           }

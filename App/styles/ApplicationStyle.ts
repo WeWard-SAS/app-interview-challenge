@@ -1,7 +1,5 @@
 import colors from './colors';
-import { Platform, StyleSheet } from 'react-native';
-
-const isAndroid = Platform.OS === 'android';
+import { StyleSheet } from 'react-native';
 
 const ApplicationStyles = StyleSheet.create({
   /** Container **/
@@ -16,18 +14,30 @@ const ApplicationStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
   },
+  fixedSizeDays: {
+    marginTop: 5,
+    height: 30,
+  },
 
   /** Text Styles **/
   genericText: {
     fontFamily: 'OpenSans-SemiBold',
   },
+  boldText: {
+    fontWeight: 'bold',
+  },
   textError: { color: colors.orange, fontSize: 12 },
   textWeekDay: {
-    color: colors.gray,
+    color: colors.grayDarker,
+    fontSize: 12,
+  },
+  textAfterWeekDay: {
+    color: colors.grayLight,
     fontSize: 12,
   },
   textStepHistory: {
     color: colors.orange,
+    fontSize: 12,
     marginTop: 3,
   },
   monthText: {

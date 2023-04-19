@@ -1,14 +1,10 @@
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Metrics from '../styles/Metrics';
 import ApplicationStyles from '../styles/ApplicationStyle';
+import { ControlsProps } from '../Utils/types/types';
 
-interface ControlsProps {
-  month: string;
-  updateDate: (date: Moment) => void;
-  isLoading: boolean;
-}
 const CalendarControls = (props: ControlsProps) => {
   const { month, updateDate, isLoading } = props;
 
