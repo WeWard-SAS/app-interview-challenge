@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import moment from 'moment';
+import 'moment/locale/fr';
 
 import ApplicationStyles from '../styles/ApplicationStyle';
 import Metrics from '../styles/Metrics';
@@ -13,6 +14,9 @@ interface Props {
 
 const CalendarWeekDays = (props: Props) => {
   const { weeks, testID } = props;
+  moment.updateLocale('fr', {
+    weekdaysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+  });
 
   return (
     <View testID={testID}>
@@ -23,13 +27,21 @@ const CalendarWeekDays = (props: Props) => {
             marginTop: Metrics.padding,
           },
         ]}>
-        {moment.weekdaysShort().map((day: string, index: number) => (
-          <View
-            key={index}
-            style={[ApplicationStyles.flex, ApplicationStyles.columnContainer]}>
-            <Text style={ApplicationStyles.boldText}>{day.toUpperCase()}.</Text>
-          </View>
-        ))}
+        {moment
+          .localeData('fr')
+          .weekdaysShort()
+          .map((day: string, index: number) => (
+            <View
+              key={index}
+              style={[
+                ApplicationStyles.flex,
+                ApplicationStyles.columnContainer,
+              ]}>
+              <Text style={ApplicationStyles.boldText}>
+                {day.toUpperCase()}.
+              </Text>
+            </View>
+          ))}
       </View>
 
       {weeks.map((week: WeekData) => (

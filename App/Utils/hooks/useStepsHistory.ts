@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NativeModules, Platform } from 'react-native';
 import moment from 'moment';
+import 'moment/locale/fr';
 
 import { getStepsHistory, isDayAfter } from '../services/healthService';
 import { DayStep, StepData, StepHistory, WeekData } from '../types/types';
@@ -49,9 +50,8 @@ const useStepsHistory = (
 
         const groupedStepsData = Object.values(result);
         const daysInMonth = moment(currentMonth, 'YYYY MM').daysInMonth();
-        const firstDayOfMonth = moment(currentMonth, 'YYYY MM')
-          .startOf('month')
-          .day();
+        const firstDayOfMonth =
+          moment(currentMonth, 'YYYY MM').startOf('month').isoWeekday() - 1;
 
         const weeksInMonth = Math.ceil((daysInMonth + firstDayOfMonth) / 7);
         const weeks: WeekData[] = [];
@@ -63,7 +63,6 @@ const useStepsHistory = (
           // Mapping the days
           for (let day = 0; day < 7; day++) {
             const dayIndex = week * 7 + day - firstDayOfMonth + 1;
-
             // If day part of the month, pushing steps and index
             if (dayIndex > 0 && dayIndex <= daysInMonth) {
               days.push({
@@ -73,7 +72,7 @@ const useStepsHistory = (
                 numberOfSteps: isDayAfter(
                   moment(`${currentMonth} ${dayIndex}`, 'YYYY MM D'),
                 )
-                  ? '300'
+                  ? ''
                   : groupedStepsData
                       .find(item => moment(item.startDate).date() === dayIndex)
                       ?.value.toLocaleString(locales.split('_')[0], {

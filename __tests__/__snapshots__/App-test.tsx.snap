@@ -65,7 +65,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
         ]
       }
     >
-      March 2023
+      Mars 2023
     </Text>
     <View
       style={
@@ -199,7 +199,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          SUN
+          LUN
           .
         </Text>
       </View>
@@ -224,7 +224,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          MON
+          MAR
           .
         </Text>
       </View>
@@ -249,7 +249,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          TUE
+          MER
           .
         </Text>
       </View>
@@ -274,7 +274,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          WED
+          JEU
           .
         </Text>
       </View>
@@ -299,7 +299,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          THU
+          VEN
           .
         </Text>
       </View>
@@ -324,7 +324,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          FRI
+          SAM
           .
         </Text>
       </View>
@@ -349,7 +349,7 @@ exports[`Calendar renders correctly with data having been fetched and no loader 
             }
           }
         >
-          SAT
+          DIM
           .
         </Text>
       </View>
@@ -389,7 +389,7 @@ exports[`Calendar renders correctly with loader, data being fetched 1`] = `
         ]
       }
     >
-      April 2022
+      Avril 2022
     </Text>
     <View
       style={
