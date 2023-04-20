@@ -1,19 +1,21 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import moment from 'moment';
+
 import ApplicationStyles from '../styles/ApplicationStyle';
 import Metrics from '../styles/Metrics';
 import { DayStep, WeekData } from '../Utils/types/types';
 
 interface Props {
   weeks: WeekData[];
+  testID: string;
 }
 
 const CalendarWeekDays = (props: Props) => {
-  const { weeks } = props;
+  const { weeks, testID } = props;
 
   return (
-    <View>
+    <View testID={testID}>
       <View
         style={[
           ApplicationStyles.rowContainer,
@@ -23,10 +25,9 @@ const CalendarWeekDays = (props: Props) => {
         ]}>
         {moment.weekdaysShort().map((day: string, index: number) => (
           <View
+            key={index}
             style={[ApplicationStyles.flex, ApplicationStyles.columnContainer]}>
-            <Text key={index} style={ApplicationStyles.boldText}>
-              {day.toUpperCase()}.
-            </Text>
+            <Text style={ApplicationStyles.boldText}>{day.toUpperCase()}.</Text>
           </View>
         ))}
       </View>
@@ -40,15 +41,15 @@ const CalendarWeekDays = (props: Props) => {
               marginTop: Metrics.padding,
             },
           ]}>
-          {week.days.map((day: DayStep) => (
+          {week.days.map((day: DayStep, index: number) => (
             <View
+              key={index}
               style={[
                 ApplicationStyles.flex,
                 ApplicationStyles.columnContainer,
                 ApplicationStyles.fixedSizeDays,
               ]}>
               <Text
-                key={day.dayNumber}
                 style={[
                   ApplicationStyles.genericText,
                   day?.isDayAfter

@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
-import { StepDataPoint } from '../services/healthService';
 
 export interface ControlsProps {
+  testID: string;
   month: string;
   updateDate: (date: Moment) => void;
   isLoading: boolean;
@@ -13,7 +13,7 @@ export type WeekData = {
 };
 
 export interface StepData {
-  steps: StepDataPoint[];
+  //steps: StepDataPoint[];
   months: string;
   weeks: WeekData[];
 }

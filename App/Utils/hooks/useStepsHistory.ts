@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { getStepsHistory, isDayAfter } from '../services/healthService';
-import moment from 'moment';
 import { NativeModules, Platform } from 'react-native';
+import moment from 'moment';
+
+import { getStepsHistory, isDayAfter } from '../services/healthService';
 import { DayStep, StepData, StepHistory, WeekData } from '../types/types';
 
 const isAndroid = Platform.OS === 'android';
 const locales = isAndroid
   ? NativeModules.I18nManager.localeIdentifier
-  : NativeModules.SettingsManager.settings.AppleLocale ||
-    NativeModules.SettingsManager.settings.AppleLanguages[0];
+  : NativeModules.SettingsManager?.settings.AppleLocale ||
+    NativeModules.SettingsManager?.settings.AppleLanguages[0];
 
 // Current Month will have this format 'YYYY MM'
-const useStepsHistory = (currentMonth: string) => {
+const useStepsHistory = (
+  currentMonth: string,
+): { data: StepData | undefined; error: string; loading: boolean } => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<StepData>();
   const [error, setError] = useState('');
@@ -102,7 +105,7 @@ const useStepsHistory = (currentMonth: string) => {
           });
         }
 
-        setData({ steps, months: currentMonth, weeks });
+        setData({ months: currentMonth, weeks });
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);

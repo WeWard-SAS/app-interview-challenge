@@ -1,18 +1,22 @@
 import moment from 'moment';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import Metrics from '../styles/Metrics';
-import ApplicationStyles from '../styles/ApplicationStyle';
+
 import { ControlsProps } from '../Utils/types/types';
 
+import Metrics from '../styles/Metrics';
+import ApplicationStyles from '../styles/ApplicationStyle';
+
 const CalendarControls = (props: ControlsProps) => {
-  const { month, updateDate, isLoading } = props;
+  const { testID, month, updateDate, isLoading } = props;
 
   return (
-    <View style={ApplicationStyles.rowContainer}>
+    <View testID={testID} style={ApplicationStyles.rowContainer}>
       <Text
         style={[ApplicationStyles.genericText, ApplicationStyles.monthText]}>
-        {moment(month, 'YYYY MM').format('YYYY MMMM')}
+        {moment(month, 'YYYY MM')
+          .format('MMMM YYYY')
+          .replace(/\b(\w)/g, c => c.toUpperCase())}
       </Text>
       <View style={ApplicationStyles.rowContainer}>
         <TouchableOpacity

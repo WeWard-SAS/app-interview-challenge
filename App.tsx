@@ -1,7 +1,9 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import Calendar from './App/Components/Calendar';
 import moment from 'moment';
+import 'moment/locale/fr';
+
+import Calendar from './App/Components/Calendar';
 
 const App = () => {
   moment.locale('fr');

@@ -20,6 +20,7 @@ const Calendar = () => {
     return (
       <View style={[ApplicationStyles.flex, ApplicationStyles.columnContainer]}>
         <Text
+          testID="error-message"
           style={[ApplicationStyles.genericText, ApplicationStyles.textError]}>
           {error}
         </Text>
@@ -29,6 +30,7 @@ const Calendar = () => {
     return (
       <View style={ApplicationStyles.flex}>
         <CalendarControls
+          testID="calendar-controls"
           month={data.months}
           updateDate={(date: Moment) => setDate(date.format('YYYY MM'))}
           isLoading={loading}
@@ -36,11 +38,12 @@ const Calendar = () => {
         <View style={ApplicationStyles.divider} />
         {loading ? (
           <ActivityIndicator
+            testID="loader"
             size="small"
             style={{ marginTop: Metrics.doublePadding }}
           />
         ) : (
-          <CalendarWeekDays weeks={data.weeks} />
+          <CalendarWeekDays testID="week-days-data" weeks={data.weeks} />
         )}
       </View>
     );
