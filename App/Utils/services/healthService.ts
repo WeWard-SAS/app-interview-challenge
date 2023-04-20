@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 interface StepDataPoint {
   startDate: string; // une string ISO 8601
@@ -32,4 +32,8 @@ export async function getStepsHistory(startDate: string, endDate: string) {
   mStartDate.add(bucketInterval, bucketPeriod);
 
   return steps;
+}
+
+export function isDayAfter(date: Moment) {
+  return date.isAfter(moment.now());
 }
