@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {getStepsHistory} from './services/healthService';
+import {Calendar} from './src/components/calendar';
 
 const App = () => {
   useEffect(() => {
@@ -16,9 +17,7 @@ const App = () => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.scrollContainer}>
-        <View>
-          <Text>Hello World !</Text>
-        </View>
+        <Calendar />
       </ScrollView>
     </SafeAreaView>
   );
