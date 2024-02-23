@@ -1,6 +1,8 @@
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import moment, {Moment} from 'moment';
+import {getStepsHistory} from '../../services/healthService';
+import {WEEK_DAYS} from '../Constants';
 
 interface ICalendarDaysProps {
   currentDate: Moment;
@@ -10,11 +12,10 @@ interface ICalendarDaysProps {
 interface IDayProps {
   currentDate: Moment;
   dayDate: Moment;
+  daySteps?: number;
 }
 
-const WEEK_DAYS = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.', 'Dim.'];
-
-const Day = ({currentDate, dayDate}: IDayProps) => {
+const Day = ({currentDate, dayDate, daySteps}: IDayProps) => {
   const isDayIsBeforeMonth = moment(dayDate).isBefore(
     moment(currentDate).startOf('month'),
   );
@@ -26,6 +27,7 @@ const Day = ({currentDate, dayDate}: IDayProps) => {
   if (isDayIsBeforeMonth || isDayIsAfterEndMonth) {
     return <View style={styles.emptyDay} />;
   }
+
   return (
     <View style={styles.stepsDayContainer}>
       <Text
@@ -33,12 +35,56 @@ const Day = ({currentDate, dayDate}: IDayProps) => {
         style={[styles.day, isFutureDay && styles.futureDay]}>
         {moment(dayDate).format('D')}
       </Text>
-      <Text style={[styles.step, isFutureDay && styles.emptyStep]}>xxxx</Text>
+      <Text style={[styles.step, isFutureDay && styles.emptyStep]}>
+        {daySteps?.toLocaleString() || '-'}
+      </Text>
     </View>
   );
 };
 
 export const CalendarDays = ({currentDate, monthArray}: ICalendarDaysProps) => {
+  const [monthSteps, setMonthSteps] = useState<Record<string, number>>({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isSubscribed = true;
+
+    const getSteps = async () => {
+      const firstDayOfMonth = moment(currentDate)
+        .startOf('month')
+        .format('YYYY-MM-DD');
+      const firstDayOfNextMonth = moment(currentDate)
+        .startOf('month')
+        .add(1, 'month')
+        .format('YYYY-MM-DD');
+      setIsLoading(true);
+      const stepsByMonth = await getStepsHistory(
+        firstDayOfMonth,
+        firstDayOfNextMonth,
+      );
+
+      if (isSubscribed) {
+        const refactoSteps = stepsByMonth
+          .map(x => ({
+            date: x.startDate.split('T')[0],
+            steps: x.value,
+          }))
+          .reduce<Record<string, number>>((acc, current) => {
+            const {date, steps} = current;
+            acc[date] = acc[date] ? acc[date] + steps : steps;
+            return acc;
+          }, {});
+
+        setMonthSteps(refactoSteps);
+        setIsLoading(false);
+      }
+    };
+    getSteps();
+    return () => {
+      isSubscribed = false;
+    };
+  }, [currentDate]);
+
   if (monthArray.length < 1) {
     return null;
   }
@@ -56,16 +102,26 @@ export const CalendarDays = ({currentDate, monthArray}: ICalendarDaysProps) => {
       {monthArray.map((week, index) => {
         return (
           <View key={`${index}`} style={styles.weekContainer}>
-            {week.map(d => (
-              <Day
-                key={d.toISOString()}
-                currentDate={currentDate}
-                dayDate={d}
-              />
-            ))}
+            {week.map(d => {
+              const daySteps =
+                monthSteps[moment(d).toISOString(true).split('T')[0]];
+              return (
+                <Day
+                  key={d.toISOString()}
+                  currentDate={currentDate}
+                  dayDate={d}
+                  daySteps={daySteps}
+                />
+              );
+            })}
           </View>
         );
       })}
+      {isLoading && (
+        <Text style={[styles.loadingText, styles.step]}>
+          Récupération des pas en cours ...
+        </Text>
+      )}
     </View>
   );
 };
@@ -110,5 +166,9 @@ const styles = StyleSheet.create({
   },
   emptyStep: {
     display: 'none',
+  },
+  loadingText: {
+    marginTop: 24,
+    textAlign: 'center',
   },
 });

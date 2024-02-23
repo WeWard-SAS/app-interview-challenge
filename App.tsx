@@ -1,17 +1,8 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
-import {getStepsHistory} from './services/healthService';
 import {Calendar} from './src/components/calendar';
 
 const App = () => {
-  useEffect(() => {
-    (async function () {
-      const steps = await getStepsHistory('2022-09-01', '2022-10-01');
-
-      console.log(steps);
-    })();
-  });
-
   return (
     <SafeAreaView>
       <ScrollView

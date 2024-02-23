@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {CalendarHeader} from './calendarHeader';
 import moment from 'moment';
 import {CalendarDays} from './calendarDays';
+import {MONTHS_FR} from '../Constants';
 
 export const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(moment());
@@ -36,10 +37,16 @@ export const Calendar = () => {
     setCurrentDate(moment(currentDate).add(1, 'month'));
   }, [currentDate]);
 
+  const headerMonthName = useMemo(() => {
+    return `${MONTHS_FR[moment(currentDate).month()]} ${moment(
+      currentDate,
+    ).format('YYYY')} `;
+  }, [currentDate]);
+
   return (
     <View>
       <CalendarHeader
-        month={moment(currentDate).format('MMMM YYYY')}
+        month={headerMonthName}
         onPressLeft={onPressPreviousMonth}
         onPressRight={onPressNextMonth}
       />
